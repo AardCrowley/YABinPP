@@ -113,3 +113,23 @@ class PasteClient:
             key = None
 
         return self.get(paste_id, key=key, password=password)
+
+    def get_user_history(self, user_token: str) -> list[dict]:
+        """
+        Retrieve a list of pastes created by the user.
+        
+        Args:
+            user_token (str): The authentication token for the user.
+
+        Returns:
+            list[dict]: A list of pastes created by the user.
+        """
+        # The endpoint `/user/history` should be implemented on the server side
+        url = f"{self.api_url}/user/history"
+        headers = {"Authorization": f"Bearer {user_token}"}
+
+        response = requests.get(url, headers=headers).json()
+        if not response["success"]:
+            raise Exception(response["error"])
+
+        return response["data"]  # Assuming server returns a list of pastes
